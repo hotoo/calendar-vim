@@ -97,7 +97,7 @@
 "     1.3w : bug fix
 "            on leap year, week number decreases.
 "     1.3v : bug fix
-"            add nowrapscan 
+"            add nowrapscan
 "            use s:bufautocommandsset for making title
 "            don't focus to navi when doubleclick bottom next>.
 "     1.3u : bug fix
@@ -155,7 +155,7 @@
 "            bug fix for calculates date.
 "     1.3c : bug fix for MakeDir()
 "            if CalendarMakeDir(sfile) != 0
-"               v 
+"               v
 "            if s:CalendarMakeDir(sfile) != 0
 "     1.3b : bug fix for calendar_monday.
 "            it didn't work g:calendar_monday correctly.
@@ -716,7 +716,7 @@ function! Calendar(...)
       if g:calendar_erafmt =~ '.*,[+-]*\d\+'
         let veranum=substitute(g:calendar_erafmt,'.*,\([+-]*\d\+\)','\1','')
         if vyear+veranum > 0
-          let vdisplay2=substitute(g:calendar_erafmt,'\(.*\),.*','\1','') 
+          let vdisplay2=substitute(g:calendar_erafmt,'\(.*\),.*','\1','')
           let vdisplay2=vdisplay2.(vyear+veranum).'/'.vmnth.'('
         else
           let vdisplay2=vyear.'/'.vmnth.'('
@@ -846,7 +846,7 @@ function! Calendar(...)
     endwhile
 
     " if it is needed, fill with space
-    if vinpcur % 7 
+    if vinpcur % 7
       while (vinpcur % 7 != 0)
         let vdisplay2=vdisplay2.'   '
         let vinpcur = vinpcur + 1
@@ -1191,7 +1191,21 @@ function! s:CalendarDiary(day, month, year, week, dir)
   let vbufnr = bufnr('__Calendar')
 
   " load the file
-  exe "sp " . sfile
+  if winnr('#') == 0
+    if a:dir == "V"
+      exe "vsplit " . sfile
+    else
+      exe "split " . sfile
+    endif
+  else
+    wincmd p
+    if !&hidden && &modified
+      exe "new " . sfile
+    else
+      exe "edit " . sfile
+    endif
+  endif
+
   setlocal ft=calendar
   let dir = getbufvar(vbufnr, "CalendarDir")
   let vyear = getbufvar(vbufnr, "CalendarYear")
