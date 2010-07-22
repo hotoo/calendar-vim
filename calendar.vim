@@ -363,6 +363,9 @@ endif
 "*****************************************************************
 command! -nargs=* Calendar  call Calendar(0,<f-args>)
 command! -nargs=* CalendarH call Calendar(1,<f-args>)
+command! -nargs=0 Cal Calendar
+exe "command! -nargs=* CalendarSearch vimgrep /<args>/".escape(g:calendar_diary," ")."**/*.cal|cw"
+
 
 if !hasmapto("<Plug>CalendarV")
   nmap <unique> <Leader>cal <Plug>CalendarV
