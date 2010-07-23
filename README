@@ -1,0 +1,4 @@
+
+$VIM/vim72/filetype.vim 加入自动文件类型设置：
+
+au BufRead,BufNewFile *.cal setfiletype calendar

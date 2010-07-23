@@ -56,6 +56,9 @@
 "     <Leader>ch
 "       show horizontal calendar ...
 " ChangeLog:
+"     2.2b : add <C-j> <C-k> for jump to next/prev diary.
+"     2.2a : added :CalendarSearch key command.
+"            change the open diary style.
 "     2.2  : http://gist.github.com/355513#file_customizable_keymap.diff
 "            http://gist.github.com/355513#file_winfixwidth.diff
 "     2.1  : bug fix, set filetype 'calendar'.
@@ -364,7 +367,82 @@ endif
 command! -nargs=* Calendar  call Calendar(0,<f-args>)
 command! -nargs=* CalendarH call Calendar(1,<f-args>)
 command! -nargs=0 Cal Calendar
-exe "command! -nargs=* CalendarSearch vimgrep /<args>/".escape(g:calendar_diary," ")."**/*.cal|cw"
+exe "command! -nargs=0 CalendarDiarys NERDTree " . g:calendar_diary
+exe "command! -nargs=* CalendarSearch vimgrep /<args>/".escape(g:calendar_diary," ")."**/*.cal|syntax on|cw"
+"command! -nargs=* CalendarSearch call CalendarSearch(<f-args>)
+"function! CalendarSearch(...)
+    "exe "vimgrep /" . a:1 . "/" . escape(g:calendar_diary, " ") . "**/*.cal"
+    "syntax off
+"endfunction
+autocmd filetype calendar nmap <buffer> <C-j> :call CalendarDiaryGoto("next")<cr>
+autocmd filetype calendar nmap <buffer> <C-k> :call CalendarDiaryGoto("prev")<cr>
+
+function! s:CalendarDiaryGetDateByFileName()
+    let filepath = expand("%")
+    let matches = split(filepath, "\\")
+    let year = str2nr(matches[len(matches)-3])
+    let month = str2nr(matches[len(matches)-2])
+    let day = matches[len(matches)-1]
+    let day = str2nr(strpart(day, 0, strlen(day)-4))
+    return [year, month, day]
+endfunction
+function! s:CalendarIsLeap(year)
+	return !empty(a:year) && (a:year%400==0 ||(a:year%4==0&&a:year%100!=0))
+endfunction
+
+" FIXME: this function just fix one next-day/prev-day.
+function! s:CalendarFixDate(year, month, day)
+    let year = a:year
+    let month = a:month
+    let day = a:day
+    let DAYS = [0,31,28,31,30,31,30,31,31,30,31,30,31]
+    if s:CalendarIsLeap(year)
+        let DAYS[2] = 29
+    endif
+    if day<1
+        let month = month - 1
+        let day = DAYS[month]
+    elseif day>DAYS[month]
+        let month = month+1
+        let day = 1
+    endif
+    if month<1
+        let year = year-1
+        let month = 12
+    elseif month>12
+        let year = year+1
+        let month = 1
+    endif
+    return [year, month, day]
+endfunction
+function! CalendarDiaryGoto(...)
+    if a:1=="next"
+        if stridx(expand("%"), g:calendar_diary)!=0
+            echo ""
+            return
+        endif
+        let date = s:CalendarDiaryGetDateByFileName()
+        let date = s:CalendarFixDate(date[0], date[1], date[2]+1)
+        let year = date[0]
+        let month = date[1]
+        let day = date[2]
+    elseif a:1=="prev"
+        if stridx(expand("%"), g:calendar_diary)!=0
+            echo ""
+            return
+        endif
+        let date = s:CalendarDiaryGetDateByFileName()
+        let date = s:CalendarFixDate(date[0], date[1], date[2]-1)
+        let year = date[0]
+        let month = date[1]
+        let day = date[2]
+    else
+        let year = a:1
+        let month = a:2
+        let day = a:3
+    endif
+    exe "edit " . g:calendar_diary . "/" . year . "/" . month . "/" . day . ".cal"
+endfunction
 
 
 if !hasmapto("<Plug>CalendarV")
@@ -1251,7 +1329,7 @@ function! s:CalendarBuildKeymap(dir, vyear, vmnth)
   execute 'nnoremap <silent> <buffer> <Plug>CalendarDoAction  :call <SID>CalendarDoAction()<cr>'
   execute 'nnoremap <silent> <buffer> <Plug>CalendarGotoToday :call Calendar(b:CalendarDir)<cr>'
   execute 'nnoremap <silent> <buffer> <Plug>CalendarShowHelp  :call <SID>CalendarHelp()<cr>'
-  execute 'nnoremap <silent> <buffer> <Plug>CalendarReDisplay :call Calendar(' . a:dir . ',' . a:vyear . ',' . a:vmnth . ')<cr>'
+  execute 'nnoremap <silent> <buffer> <Plug>CalendarReDisplay :call Calendar(' . a:dir . ',' . a:vyear . ',' . (a:vmnth-2) . ')<cr>'
   let pnav = s:GetToken(g:calendar_navi_label, ',', 1)
   let nnav = s:GetToken(g:calendar_navi_label, ',', 3)
   execute 'nnoremap <silent> <buffer> <Plug>CalendarGotoPrevMonth :call <SID>CalendarDoAction("<' . pnav . '")<cr>'
