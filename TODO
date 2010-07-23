@@ -11,5 +11,10 @@ TODO:
     +2009/8
     +2009/5
 3. 支持多 diary，参考 Vimwiki-diary.
-4. ? 年历，月历，周历，日历 ?
-5. 同步到 Google Calendar/Google Docs.
+4. 日历及 diary 文件的快捷键支持，例如，如果当前打开的 .cal 文件
+    是在 g:calendar_diary 目录，则可以使用快捷键自己跳转到上、下一天。
+5. calendar.vim 的中文文档。
+6. 同步到 Google Calendar/Google Docs.
+    - [http://www.weloving.net/?p=1234 Vim Calendar插件和Google Calendar同步 java版]
+    - [http://code.google.com/p/diaryvgc/ Synchronism Python Script between VIM Calendar diary and Google Calendar.]
+7. ? 年历，月历，周历，日历 ?
