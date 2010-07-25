@@ -3,6 +3,9 @@ TODO:
 -[X] Open diary in the recent used window,
         if have no the recent window, or it's hidden or modified,
         open diary in new window.
+    - [ ] 类似 NERDTree 的打开方式：
+            i 强制在新窗口中打开，
+            T 在新 tabs 中打开。
 -[O] 用 NERDTree 展示 g:calendar_diary 目录，
     精简的，可以整合年月目录：
     ~2010/7
