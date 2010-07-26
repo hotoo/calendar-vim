@@ -416,8 +416,13 @@ function! s:CalendarFixDate(year, month, day)
     return [year, month, day]
 endfunction
 function! CalendarDiaryGoto(...)
+    let diary_path = finddir(g:calendar_diary)
+    if exists('+shellslash') && &shellslash
+        let diary_path = substitute(diary_path, "\\", "/", "g")
+    endif
+
     if a:1=="next"
-        if stridx(expand("%"), finddir(g:calendar_diary))!=0
+        if stridx(expand("%"), diary_path)!=0
             echo ""
             return
         endif
@@ -427,7 +432,7 @@ function! CalendarDiaryGoto(...)
         let month = date[1]
         let day = date[2]
     elseif a:1=="prev"
-        if stridx(expand("%"), finddir(g:calendar_diary))!=0
+        if stridx(expand("%"), diary_path)!=0
             echo ""
             return
         endif
