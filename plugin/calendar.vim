@@ -379,7 +379,7 @@ autocmd filetype calendar nmap <buffer> <C-k> :call CalendarDiaryGoto("prev")<cr
 
 function! s:CalendarDiaryGetDateByFileName()
     let filepath = expand("%")
-    let matches = split(filepath, "\\")
+    let matches = split(filepath, "[/\]")
     let year = str2nr(matches[len(matches)-3])
     let month = str2nr(matches[len(matches)-2])
     let day = matches[len(matches)-1]
@@ -417,7 +417,7 @@ function! s:CalendarFixDate(year, month, day)
 endfunction
 function! CalendarDiaryGoto(...)
     if a:1=="next"
-        if stridx(expand("%"), g:calendar_diary)!=0
+        if stridx(expand("%"), finddir(g:calendar_diary))!=0
             echo ""
             return
         endif
@@ -427,7 +427,7 @@ function! CalendarDiaryGoto(...)
         let month = date[1]
         let day = date[2]
     elseif a:1=="prev"
-        if stridx(expand("%"), g:calendar_diary)!=0
+        if stridx(expand("%"), finddir(g:calendar_diary))!=0
             echo ""
             return
         endif
