@@ -23,4 +23,7 @@ TODO:
 -[O] 同步到 Google Calendar/Google Docs.
     - [http://www.weloving.net/?p=1234 Vim Calendar插件和Google Calendar同步 java版]
     - [http://code.google.com/p/diaryvgc/ Synchronism Python Script between VIM Calendar diary and Google Calendar.]
--[ ] ? 年历，月历，周历，日历 ?
+-[ ] 年历视图，参考 year-view.cal
+-[?] 其他历法支持，例如农历、日本历、印度历等等，可以设计成 API，支持扩展。
+-[ ] 本地化支持，目前可以通过设置各个 label 实现。准备设计成默认的选项，用户选择使用的语言即可。
+        题外话：中文标签放在里面不怎么好看的说，跟我使用的字体也有关系。
