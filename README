@@ -1,4 +1,7 @@
 
+[![Screenshot of Vim Calendar Improved](http://farm5.static.flickr.com/4125/4833130179_a7e37f5f06_z.jpg)](http://www.flickr.com/photos/hotoo/4833130179/)
+
+
 $VIM/vim72/filetype.vim 加入自动文件类型设置：
 
 au BufRead,BufNewFile *.cal setfiletype calendar

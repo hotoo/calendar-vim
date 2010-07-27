@@ -17,12 +17,12 @@ TODO:
     +2009/8
     +2009/5
 -[ ] 多日历的支持，参考 Vimwiki-diary.
-        日历(Calendar)本身是独立的，提供一下接口支持第三方开发。
+        日历(Calendar)本身是独立的，提供一些接口支持第三方开发。
         每次最多一个（可以没有）日历存在。
         let g:calendar_diary_list = [
-            \   {"name":"Diary", "path":"path/to/diary", "ext":"diary"},
-            \   {"name":"Wroks", "path":"path/to/works", "ext":"task"},
-            \   {"name":"Tasks", "path":"path/to/tasks", "ext":"task"},
+            \   {'name': 'Works', 'path': 'D:\My Dropbox\diary\works', 'ext': 'task'},
+            \   {'name': 'Tasks', 'path': 'D:\My Dropbox\diary\tasks', 'ext': 'task'},
+            \   {'name': 'Diary', 'path': 'D:\My Dropbox\diarys\home', 'ext': 'diary'},
             \ ]
     -[ ] 日记(Diary)插件，用于管理日记。
     -[ ] 任务(Tasks)插件，用于管理待办事项。
