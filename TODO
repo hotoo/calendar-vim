@@ -16,7 +16,17 @@ TODO:
     +2010/5
     +2009/8
     +2009/5
--[ ] 支持多 diary，参考 Vimwiki-diary.
+-[ ] 支持多 diary，参考
+-[ ] 多日历的支持，参考 Vimwiki-diary.
+        日历(Calendar)本身是独立的，提供一下接口支持第三方开发。
+        每次最多一个（可以没有）日历存在。
+        let g:calendar_diary_list = [
+            \   {"name":"Diary", "path":"path/to/diary", "ext":"diary"},
+            \   {"name":"Wroks", "path":"path/to/works", "ext":"task"},
+            \   {"name":"Tasks", "path":"path/to/tasks", "ext":"task"},
+            \ ]
+    -[ ] 日记(Diary)插件，用于管理日记。
+    -[ ] 任务(Tasks)插件，用于管理待办事项。
 -[X] 日历及 diary 文件的快捷键支持，例如，如果当前打开的 .cal 文件
     是在 g:calendar_diary 目录，则可以使用快捷键自己跳转到上、下一天。
 -[ ] calendar.vim 的中文文档。
