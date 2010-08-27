@@ -41,13 +41,17 @@ if !exists("g:calendar_datetime")
  \&& g:calendar_datetime != 'statusline')
   let g:calendar_datetime = 'title'
 endif
+
+if !exists("g:calendar_current_idx")
+    let g:calendar_current_idx = 0
+endif
 if !exists("g:calendar_list") && !exists("g:calendar_diary")
-    let g:calendar_list = [{'name': 'Diary', 'path': '~/diary', 'ext': 'diary'}]
-    if !exists("g:calendar_current_idx")
-        let g:calendar_current_idx = 0
-    endif
+    let g:calendar_diary = '~/diary'
+    let g:calendar_list = [{'name': 'Diary', 'path': g:calendar_diary, 'ext': 'cal'}]
 elseif !exists("g:calendar_diary")
-    let g:calendar_diary = "~/diary"
+    let g:calendar_diary = g:calendar_list[g:calendar_current_idx].path
+elseif !exists("g:calendar_list")
+    let g:calendar_list = [{'name': 'Diary', 'path': g:calendar_diary, 'ext': 'cal'}]
 endif
 
 "*****************************************************************
@@ -57,10 +61,10 @@ command! -nargs=* Calendar  call Calendar(0,<f-args>)
 command! -nargs=* CalendarH call Calendar(1,<f-args>)
 command! -nargs=0 Cal Calendar
 exe "command! -nargs=0 CalendarDiarys NERDTree " . g:calendar_diary
-exe "command! -nargs=* CalendarSearch vimgrep /<args>/".escape(g:calendar_diary," ")."**/*.cal|syntax on|cw"
+exe "command! -nargs=* CalendarSearch vimgrep /<args>/".escape(g:calendar_diary," ")."**/*.".g:calendar_list[g:calendar_current_idx]["ext"]."|syntax on|cw"
 "command! -nargs=* CalendarSearch call CalendarSearch(<f-args>)
 "function! CalendarSearch(...)
-    "exe "vimgrep /" . a:1 . "/" . escape(g:calendar_diary, " ") . "**/*.cal"
+    "exe "vimgrep /" . a:1 . "/" . escape(g:calendar_diary, " ") . "**/*.".g:calendar_list[g:calendar_current_idx]["ext"]
     "syntax off
 "endfunction
 autocmd filetype calendar nmap <buffer> <C-j> :call CalendarDiaryGoto("next")<cr>
@@ -135,7 +139,7 @@ function! CalendarDiaryGoto(...)
         let month = a:2
         let day = a:3
     endif
-    exe "edit " . g:calendar_diary . "/" . year . "/" . month . "/" . day . ".cal"
+    exe "edit ".g:calendar_diary."/".year."/".month."/".day.".".g:calendar_list[g:calendar_current_idx]["ext"]
 endfunction
 
 function! NumberOfWeek(year,month,day)
@@ -305,7 +309,7 @@ endfunction
 "*****************************************************************
 "* CalendarDoAction : call the action handler function
 "*----------------------------------------------------------------
-"*****************************************************************
+"**************************************************************{{{
 function! s:CalendarDoAction(...)
     " for switch calendar list.
     let text = getline(".")
@@ -436,7 +440,46 @@ function! s:CalendarDoAction(...)
   endif
   " call the action function
   exe "call " . g:calendar_action . "(day, month, year, week, dir)"
-endfunc
+endfunc "}}}
+
+function! CalendarOpenFile(path)
+    " load the file
+    if winnr('#') == 0
+        if a:dir == "V"
+            exe "vsplit " . a:path
+        else
+            exe "split " . a:path
+        endif
+    else
+        wincmd p
+        if !&hidden && &modified
+            exe "new " . a:path
+        else
+            exe "edit " . a:path
+        endif
+    endif
+endfunction
+
+function! s:CalendarOpen()
+    let text = getline(".")
+    if text =~ "^([Oo ])"
+        let list_idx = 0
+        let curl = line(".") - 1
+        while curl>1
+            if getline(curl) =~ "^([Oo ])"
+                let list_idx += 1
+                let curl -= 1
+            else
+                let g:calendar_current_idx = list_idx
+                let g:calendar_diary = g:calendar_list[list_idx].path
+                let ext = g:calendar_list[list_idx].ext
+                call Calendar(b:CalendarDir, b:CalendarYear, b:CalendarMonth)
+                call CalendarOpenFile(g:calendar_diary."/index.".ext)
+                return
+            endif
+        endwhile
+    endif
+endfunction
 
 "*****************************************************************
 "* Calendar : build calendar
@@ -944,7 +987,7 @@ function! Calendar(...)
     " Without this, the 'sidescrolloff' setting may cause the left side of the
     " calendar to disappear if the last inserted element is near the right
     " window border.
-    setlocal wrap
+    setlocal nowrap
     setlocal norightleft
     setlocal foldcolumn=0
     setlocal modifiable
@@ -1125,7 +1168,7 @@ function! s:CalendarDiary(day, month, year, week, dir)
       return
     endif
   endif
-  let sfile = expand(sfile) . "/" . a:day . ".cal"
+  let sfile = expand(sfile)."/".a:day.".".g:calendar_list[g:calendar_current_idx]["ext"]
   let sfile = substitute(sfile, ' ', '\\ ', 'g')
   let vbufnr = bufnr('__Calendar')
 
@@ -1145,7 +1188,7 @@ function! s:CalendarDiary(day, month, year, week, dir)
     endif
   endif
 
-  setlocal ft=calendar
+  "setlocal ft=calendar
   let dir = getbufvar(vbufnr, "CalendarDir")
   let vyear = getbufvar(vbufnr, "CalendarYear")
   let vmnth = getbufvar(vbufnr, "CalendarMonth")
@@ -1160,7 +1203,7 @@ endfunc
 "*   year  : year of sign
 "*****************************************************************
 function! s:CalendarSign(day, month, year)
-  let sfile = g:calendar_diary."/".a:year."/".a:month."/".a:day.".cal"
+  let sfile = g:calendar_diary."/".a:year."/".a:month."/".a:day.".".g:calendar_list[g:calendar_current_idx]["ext"]
   return filereadable(expand(sfile))
 endfunction
 
@@ -1185,6 +1228,7 @@ function! s:CalendarBuildKeymap(dir, vyear, vmnth)
 
   execute 'nnoremap <silent> <buffer> <Plug>CalendarDoAction  :call <SID>CalendarDoAction()<cr>'
   execute 'nnoremap <silent> <buffer> <Plug>CalendarDoAction  :call <SID>CalendarDoAction()<cr>'
+  execute 'nnoremap <silent> <buffer> <Plug>CalendarOpen      :call <SID>CalendarOpen()<cr>'
   execute 'nnoremap <silent> <buffer> <Plug>CalendarGotoToday :call Calendar(b:CalendarDir)<cr>'
   execute 'nnoremap <silent> <buffer> <Plug>CalendarShowHelp  :call <SID>CalendarHelp()<cr>'
   execute 'nnoremap <silent> <buffer> <Plug>CalendarReDisplay :call Calendar(' . a:dir . ',' . a:vyear . ',' . (a:vmnth-2) . ')<cr>'
@@ -1200,6 +1244,7 @@ function! s:CalendarBuildKeymap(dir, vyear, vmnth)
   nmap <buffer> t             <Plug>CalendarGotoToday
   nmap <buffer> ?             <Plug>CalendarShowHelp
   nmap <buffer> r             <Plug>CalendarReDisplay
+  nmap <buffer> o             <Plug>CalendarOpen
 
   nmap <buffer> <Left>  <Plug>CalendarGotoPrevMonth
   nmap <buffer> <Right> <Plug>CalendarGotoNextMonth
