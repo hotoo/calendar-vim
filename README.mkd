@@ -5,29 +5,29 @@
 
 Put following files into .vim(vimfiles for Windows) folder:
 
-calendar-vim
-  |
-  +- plugin
-  |  |
-  |  +- calendar.Vim
-  |  |
-  |  +- diary.vim (optional)
-  |  |
-  |  +- task.vim (optional)
-  |
-  +- ftplugin
-  |  |
-  |  +- task
-  |     |
-  |     +- task.vim (optional)
-  |
-  +- indent
-  |  |
-  |  +- task.vim (optional)
-  |
-  +- syntax
-     |
-     +- task.vim (optional)
+    calendar-vim
+      |
+      +- plugin
+      |  |
+      |  +- calendar.Vim
+      |  |
+      |  +- diary.vim (optional)
+      |  |
+      |  +- task.vim (optional)
+      |
+      +- ftplugin
+      |  |
+      |  +- task
+      |     |
+      |     +- task.vim (optional)
+      |
+      +- indent
+      |  |
+      |  +- task.vim (optional)
+      |
+      +- syntax
+         |
+         +- task.vim (optional)
 
 
 set following code into vimrc:
