@@ -1,13 +1,39 @@
 
 [![Screenshot of Vim Calendar Improved](http://farm5.static.flickr.com/4125/4833130179_a7e37f5f06_z.jpg)](http://www.flickr.com/photos/hotoo/4833130179/)
 
+## 安装
+
+Put following files into .vim(vimfiles for Windows) folder:
+
+calendar-vim
+  |
+  +- plugin
+  |  |
+  |  +- calendar.Vim
+  |  |
+  |  +- diary.vim (optional)
+  |  |
+  |  +- task.vim (optional)
+  |
+  +- ftplugin
+  |  |
+  |  +- task
+  |     |
+  |     +- task.vim (optional)
+  |
+  +- indent
+  |  |
+  |  +- task.vim (optional)
+  |
+  +- syntax
+     |
+     +- task.vim (optional)
+
+
+set following code into vimrc:
+
     let g:calendar_list = [
         \   {'name': 'Tasks', 'path': 'D:\My Dropbox\tasks', 'ext': 'task'},
         \   {'name': 'Diary', 'path': 'D:\My Dropbox\diary', 'ext': 'diary'},
     \ ]
     let g:calendar_current_idx = 1
-
-
-$VIM/vim72/filetype.vim 加入自动文件类型设置：
-
-au BufRead,BufNewFile *.cal setfiletype calendar
