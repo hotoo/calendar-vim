@@ -1,0 +1,35 @@
+
+= Test =
+*![ ] Important, use shortcut-key ! toggle this.
+    *![ ] Important.
+          multi-line support test.
+* [ ] Normal
+    * [ ] Normal
+*~[ ] Lower, use shortcut-key ~ toggle this.
+    *~[ ] Lower
+*![.] Important dot.
+    *![.] Important dot.
+*![o] Important o.
+    *![o] Important o.
+*![O] Important O.
+    *![O] Important O.
+*![1] Important others.
+    *![1] Important others.
+*![X] Important Done.
+    *![X] Important Done.
+* [.] Normal dot.
+    * [.] Normal dot.
+* [o] Normal o.
+    * [o] Normal o.
+* [O] Normal O.
+    * [O] Normal O.
+* [X] Normal Done.
+    * [X] Normal Done.
+*~[.] Lower dot.
+    *~[.] Lower dot.
+*~[o] Lower o.
+    *~[o] Lower o.
+*~[O] Lower O.
+    *~[O] Lower O.
+*~[X] Lower Done.
+    *~[X] Lower Done.
