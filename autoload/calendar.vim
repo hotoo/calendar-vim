@@ -756,7 +756,31 @@ function! calendar#show(...)
       let vinpcur = vinpcur + 1
       if vinpcur % 7 == 0
         if exists('g:calendar_weeknm')
-          let vwsign = calendar#weekNumberSign(viweek, vyear)
+          " year value for week number
+          let vwyear = vyear
+          "       2019/12(Dec)
+          " Mon Tue Wed Thu Fri Sat Sun Week
+          "  30  31                      W01
+          "
+          "       2020/1(Jan)
+          " Mon Tue Wed Thu Fri Sat Sun Week
+          "           1   2   3   4   5  W01
+          if vmnth == 12 && viweek == 1
+            let vwyear = vwyear + 1
+          endif
+
+          "           2021/12(Jan)
+          " Mon Tue Wed Thu Fri Sat Sun Week
+          "  27  28  29  30  31          W52
+          "
+          "           2022/1(Jan)
+          " Mon Tue Wed Thu Fri Sat Sun Week
+          "                       1   2  W52
+          if vmnth == 1 && viweek > 50
+            let vwyear = vwyear - 1
+          endif
+
+          let vwsign = calendar#weekNumberSign(viweek, vwyear)
           let vwsignLeft = vwsign
           let vwsignRight = ''
           if g:calendar_mark == 'right'
@@ -825,7 +849,32 @@ function! calendar#show(...)
         if g:calendar_mark != 'right'
           let vdisplay2 = vdisplay2
         endif
-        let vwsign = calendar#weekNumberSign(viweek, vyear)
+
+        " year value for week number
+        let vwyear = vyear
+        "       2019/12(Dec)
+        " Mon Tue Wed Thu Fri Sat Sun Week
+        "  30  31                      W01
+        "
+        "       2020/1(Jan)
+        " Mon Tue Wed Thu Fri Sat Sun Week
+        "           1   2   3   4   5  W01
+        if vmnth == 12 && viweek == 1
+          let vwyear = vwyear + 1
+        endif
+
+        "           2021/12(Jan)
+        " Mon Tue Wed Thu Fri Sat Sun Week
+        "  27  28  29  30  31          W52
+        "
+        "           2022/1(Jan)
+        " Mon Tue Wed Thu Fri Sat Sun Week
+        "                       1   2  W52
+        if vmnth == 1 && viweek > 50
+          let vwyear = vwyear - 1
+        endif
+
+        let vwsign = calendar#weekNumberSign(viweek, vwyear)
         let vwsignLeft = vwsign
         let vwsignRight = ''
         if g:calendar_mark == 'right'
