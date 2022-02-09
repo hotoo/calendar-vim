@@ -45,10 +45,7 @@ if !exists("g:calendar_datetime")
   let g:calendar_datetime = 'title'
 endif
 if !exists("g:calendar_options")
-  let g:calendar_options = "fdc=0 nonu"
-  if has("+relativenumber")
-    let g:calendar_options .= " nornu"
-  endif
+  let g:calendar_options = "fdc=0 nonu nornu"
 endif
 if !exists("g:calendar_filetype")
   let g:calendar_filetype = "markdown"
@@ -1093,9 +1090,6 @@ function! calendar#show(...)
     setlocal bufhidden=delete
     silent! exe "setlocal " . g:calendar_options
     let nontext_columns = &foldcolumn + &nu * &numberwidth
-    if has("+relativenumber")
-      let nontext_columns += &rnu * &numberwidth
-    endif
     " Without this, the 'sidescrolloff' setting may cause the left side of the
     " calendar to disappear if the last inserted element is near the right
     " window border.
