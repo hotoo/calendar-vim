@@ -28,6 +28,9 @@ if !exists("g:calendar_diary")
   if exists("g:calendar_diary_list") && diary_list_len > 0 && g:calendar_diary_list_curr_idx >= 0 && g:calendar_diary_list_curr_idx < diary_list_len
     let g:calendar_diary = g:calendar_diary_list[g:calendar_diary_list_curr_idx].path
     let g:calendar_diary_extension = g:calendar_diary_list[g:calendar_diary_list_curr_idx].ext
+    let g:calendar_yearly_extension = g:calendar_diary_list[g:calendar_diary_list_curr_idx].yearly_ext
+    let g:calendar_monthly_extension = g:calendar_diary_list[g:calendar_diary_list_curr_idx].monthly_ext
+    let g:calendar_weekly_extension = g:calendar_diary_list[g:calendar_diary_list_curr_idx].weekly_ext
   else
     let g:calendar_diary = "~/diary"
   endif
@@ -54,7 +57,16 @@ if !exists("g:calendar_filetype")
   let g:calendar_filetype = "markdown"
 endif
 if !exists("g:calendar_diary_extension")
-    let g:calendar_diary_extension = ".md"
+  let g:calendar_diary_extension = ".md"
+endif
+if !exists("g:calendar_yearly_extension")
+  let g:calendar_yearly_extension = g:calendar_diary_extension
+endif
+if !exists("g:calendar_monthly_extension")
+  let g:calendar_monthly_extension = g:calendar_diary_extension
+endif
+if !exists("g:calendar_weekly_extension")
+  let g:calendar_weekly_extension = g:calendar_diary_extension
 endif
 if !exists("g:calendar_search_grepprg")
   let g:calendar_search_grepprg = "grep"
@@ -63,13 +75,13 @@ if !exists("g:calendar_wnmruler")
   let g:calendar_wnmruler = "WK"
 endif
 if !exists("g:calendar_yearly_path_pattern")
-  let g:calendar_yearly_path_pattern = '{YYYY}/README{EXT}'
+  let g:calendar_yearly_path_pattern = '{YYYY}/README{YEARLY_EXT}'
 endif
 if !exists("g:calendar_monthly_path_pattern")
-  let g:calendar_monthly_path_pattern = '{YYYY}/{MM}/README{EXT}'
+  let g:calendar_monthly_path_pattern = '{YYYY}/{MM}/README{MONTHLY_EXT}'
 endif
 if !exists("g:calendar_weekly_path_pattern")
-  let g:calendar_weekly_path_pattern = '{YYYY}/week/{WW}{EXT}'
+  let g:calendar_weekly_path_pattern = '{YYYY}/week/{WW}{WEEKLY_EXT}'
 endif
 if !exists("g:calendar_diary_path_pattern")
   let g:calendar_diary_path_pattern = '{YYYY}/{MM}/{DD}{EXT}'
@@ -175,6 +187,9 @@ function! calendar#action(...)
         let g:calendar_diary_list_curr_idx = list_idx
         let g:calendar_diary = g:calendar_diary_list[list_idx].path
         let g:calendar_diary_extension = g:calendar_diary_list[list_idx].ext
+        let g:calendar_yearly_extension = g:calendar_diary_list[list_idx].yearly_ext
+        let g:calendar_monthly_extension = g:calendar_diary_list[list_idx].monthly_ext
+        let g:calendar_weekly_extension = g:calendar_diary_list[list_idx].weekly_ext
         call calendar#show(b:CalendarDir, b:CalendarYear, b:CalendarMonth)
         return
       endif
@@ -1409,6 +1424,12 @@ function! calendar#substitute_path_pattern(pattern, data)
 
   const EXT = g:calendar_diary_extension
   let path = substitute(path, '{EXT}', EXT, '')
+  const YEARLY_EXT = g:calendar_yearly_extension
+  let path = substitute(path, '{YEARLY_EXT}', YEARLY_EXT, '')
+  const MONTHLY_EXT = g:calendar_monthly_extension
+  let path = substitute(path, '{MONTHLY_EXT}', MONTHLY_EXT, '')
+  const WEEKLY_EXT = g:calendar_weekly_extension
+  let path = substitute(path, '{WEEKLY_EXT}', WEEKLY_EXT, '')
 
   return path
 endfunction
