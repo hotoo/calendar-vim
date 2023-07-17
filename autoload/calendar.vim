@@ -1407,30 +1407,30 @@ function! calendar#substitute_path_pattern(pattern, data)
 
   if has_key(a:data, 'year')
     const YYYY = printf("%04d", a:data['year'])
-    let path = substitute(path, '{YYYY}', YYYY, '')
+    let path = substitute(path, '{YYYY}', YYYY, 'g')
   endif
   if has_key(a:data, 'month')
     const MM = printf("%02d", a:data['month'])
-    let path = substitute(path, '{MM}', MM, '')
+    let path = substitute(path, '{MM}', MM, 'g')
   endif
 
   if has_key(a:data, 'weeknm')
     const WW = printf("%02d", a:data['weeknm'])
-    let path = substitute(path, '{WW}', WW, '')
+    let path = substitute(path, '{WW}', WW, 'g')
   endif
   if has_key(a:data, 'day')
     const DD = printf("%02d", a:data['day'])
-    let path = substitute(path, '{DD}', DD, '')
+    let path = substitute(path, '{DD}', DD, 'g')
   endif
 
   const EXT = g:calendar_diary_extension
-  let path = substitute(path, '{EXT}', EXT, '')
+  let path = substitute(path, '{EXT}', EXT, 'g')
   const YEARLY_EXT = g:calendar_yearly_extension
-  let path = substitute(path, '{YEARLY_EXT}', YEARLY_EXT, '')
+  let path = substitute(path, '{YEARLY_EXT}', YEARLY_EXT, 'g')
   const MONTHLY_EXT = g:calendar_monthly_extension
-  let path = substitute(path, '{MONTHLY_EXT}', MONTHLY_EXT, '')
+  let path = substitute(path, '{MONTHLY_EXT}', MONTHLY_EXT, 'g')
   const WEEKLY_EXT = g:calendar_weekly_extension
-  let path = substitute(path, '{WEEKLY_EXT}', WEEKLY_EXT, '')
+  let path = substitute(path, '{WEEKLY_EXT}', WEEKLY_EXT, 'g')
 
   return path
 endfunction
